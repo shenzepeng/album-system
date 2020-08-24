@@ -1,4 +1,4 @@
-package kxg.album.system;
+package kxg.album.system.service;
 
 public interface DemoService {
 

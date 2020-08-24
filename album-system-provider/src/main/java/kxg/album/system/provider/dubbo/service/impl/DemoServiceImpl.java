@@ -1,7 +1,7 @@
-package kxg.album.system.provider;
+package kxg.album.system.provider.dubbo.service.impl;
 
 import org.apache.dubbo.config.annotation.Service;
-import kxg.album.system.DemoService;
+import kxg.album.system.service.DemoService;
 import org.apache.dubbo.rpc.RpcContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
