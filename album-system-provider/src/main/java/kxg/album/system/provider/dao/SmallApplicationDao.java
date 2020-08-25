@@ -4,7 +4,7 @@ import io.swagger.models.auth.In;
 import kxg.album.system.provider.mapper.SmallApplicationUserMapper;
 import kxg.album.system.provider.pojo.SmallApplicationUser;
 import kxg.album.system.request.AddSAUserRequest;
-import org.apache.catalina.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import tk.mybatis.mapper.entity.Example;

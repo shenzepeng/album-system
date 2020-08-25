@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
-@EnableApolloConfig
+@EnableApolloConfig(value = {"dubbo","application","database","redis"})
 @EnableSwagger2
 @EnableScheduling
 @MapperScan("kxg.album.system.provider.mapper")

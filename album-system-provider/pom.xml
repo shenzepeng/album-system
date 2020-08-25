@@ -8,7 +8,7 @@
     <groupId>kxg.album</groupId>
     <artifactId>album-system-provider</artifactId>
     <version>1.0.0</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>${project.artifactId}</name>
     <description>The demo provider module of dubbo project</description>
     <properties>
@@ -131,11 +131,6 @@
             <version>2.1.5</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.mybatis.spring.boot</groupId>-->
-        <!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
-        <!--            <version>2.1.5</version>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -146,11 +141,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
