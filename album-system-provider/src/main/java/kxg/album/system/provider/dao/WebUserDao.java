@@ -19,8 +19,7 @@ public class WebUserDao {
     public List<WebUser> login(String phoneNumber,String password){
         Example example=new Example(WebUser.class);
         example.createCriteria()
-                .andEqualTo("phoneNumber",phoneNumber)
-                .andEqualTo("password",password);
+                .andEqualTo("phoneNumber",phoneNumber);
         return webUserMapper.selectByExample(example);
     }
 }

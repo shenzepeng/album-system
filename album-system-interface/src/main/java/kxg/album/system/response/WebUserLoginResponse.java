@@ -13,10 +13,7 @@ public class WebUserLoginResponse implements Serializable {
     private static final long serialVersionUID = 7912983205987653942L;
     private Long id;
 
-
     private String phoneNumber;
-
-    private String password;
 
 
     private String nickName;
@@ -26,4 +23,6 @@ public class WebUserLoginResponse implements Serializable {
 
 
     private Date updateTime;
+
+    private String token;
 }

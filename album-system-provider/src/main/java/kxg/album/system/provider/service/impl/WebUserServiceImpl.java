@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 要写注释呀
@@ -30,9 +31,11 @@ public class WebUserServiceImpl implements WebUserService {
     @Override
     public WebUserLoginResponse login(WebUserLoginRequest webUserLoginRequest) {
         List<WebUser> login = webUserDao.login(webUserLoginRequest.getPhoneNumber(), webUserLoginRequest.getPassword());
-        if (!CollectionUtils.isEmpty(login)) {
+        if (!CollectionUtils.isEmpty(login)
+                &&login.get(0).getPassword().equals(webUserLoginRequest.getPassword())) {
             WebUserLoginResponse webUserLoginResponse = new WebUserLoginResponse();
             BeanUtils.copyProperties(webUserLoginResponse, login.get(0));
+            webUserLoginResponse.setToken(UUID.randomUUID().toString());
             return webUserLoginResponse;
         }
         throw new KxgException(ReturnCode.WEB_USER_PHONE_NUMBER_OR_PASSWORD_IS_NOT_RIGHT);
