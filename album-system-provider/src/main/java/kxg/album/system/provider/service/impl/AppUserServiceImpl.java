@@ -8,7 +8,9 @@ import kxg.album.system.provider.service.AppUserService;
 
 import kxg.album.system.request.AppUserLoginRequest;
 import kxg.album.system.request.AppUserUnionLoginRequest;
+import kxg.album.system.request.FindAppOrderInfoRequest;
 import kxg.album.system.response.AppUserLoginResponse;
+import kxg.album.system.response.FindAppOrderInfoResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +58,11 @@ public class AppUserServiceImpl implements AppUserService {
 
         }
         throw new KxgException(ReturnCode.PLEASE_CHECK_PHONE_NUMBER_AND_PASSWORD);
+    }
+
+    @Override
+    public FindAppOrderInfoResponse findAppOrderInfo(FindAppOrderInfoRequest request) {
+        return null;
     }
 
     private void addAppUser(AppUser appUser){

@@ -10,8 +10,18 @@ import java.io.Serializable;
 @Data
 public class FindAppOrderInfoRequest implements Serializable {
     private static final long serialVersionUID = 1056221823047155727L;
+    /**
+     * 商户id
+     */
     private Long appUserId;
+    /**
+     * 状态
+     */
     private Short status;
+    /**
+     * 订单号
+     */
+    private String orderKey;
     private Integer pageNumber=1;
     private Integer pageSize=10;
 }
