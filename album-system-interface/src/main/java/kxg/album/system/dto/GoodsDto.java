@@ -13,5 +13,10 @@ import java.util.List;
 public class GoodsDto implements Serializable {
 
     private static final long serialVersionUID = 2726801459175718404L;
-
+    private String goodsName;
+    private Date createTime;
+    private Date updateTime;
+    private String content;
+    private List<String> smallPicture;
+    private List<String> bigPicture;
 }
