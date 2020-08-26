@@ -22,14 +22,14 @@ public class Goods {
     @Column(name = "update_time")
     private Date updateTime;
 
-    /**
-     * 开关id
-     */
-    @Column(name = "shop_ship_id")
-    private Long shopShipId;
-
     @Column(name = "content_id")
     private Long contentId;
+
+    /**
+     * 店铺id
+     */
+    @Column(name = "shop_id")
+    private Long shopId;
 
     /**
      * @return id
@@ -96,24 +96,6 @@ public class Goods {
     }
 
     /**
-     * 获取开关id
-     *
-     * @return shop_ship_id - 开关id
-     */
-    public Long getShopShipId() {
-        return shopShipId;
-    }
-
-    /**
-     * 设置开关id
-     *
-     * @param shopShipId 开关id
-     */
-    public void setShopShipId(Long shopShipId) {
-        this.shopShipId = shopShipId;
-    }
-
-    /**
      * @return content_id
      */
     public Long getContentId() {
@@ -125,5 +107,23 @@ public class Goods {
      */
     public void setContentId(Long contentId) {
         this.contentId = contentId;
+    }
+
+    /**
+     * 获取店铺id
+     *
+     * @return shop_id - 店铺id
+     */
+    public Long getShopId() {
+        return shopId;
+    }
+
+    /**
+     * 设置店铺id
+     *
+     * @param shopId 店铺id
+     */
+    public void setShopId(Long shopId) {
+        this.shopId = shopId;
     }
 }

@@ -17,6 +17,6 @@ public class GoodsDto implements Serializable {
     private Date createTime;
     private Date updateTime;
     private String content;
-    private List<PictureDto> smallPicture;
-    private List<PictureDto> bigPicture;
+    private List<String> smallPicture;
+    private List<String> bigPicture;
 }

@@ -11,4 +11,6 @@ import java.io.Serializable;
 public class FindAllGoodsRequest implements Serializable {
     private static final long serialVersionUID = 4263977922075524405L;
     private String goodsName;
+    private Integer pageNumber=1;
+    private Integer pageSize=20;
 }

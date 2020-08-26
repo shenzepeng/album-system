@@ -3,8 +3,8 @@ package kxg.album.system.provider.pojo;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "t_goods_shopship")
-public class GoodsShopShip {
+@Table(name = "t_shop_switch")
+public class ShopSwitch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

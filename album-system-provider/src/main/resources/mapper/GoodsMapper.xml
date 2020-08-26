@@ -9,7 +9,7 @@
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="shop_ship_id" jdbcType="BIGINT" property="shopShipId" />
     <result column="content_id" jdbcType="BIGINT" property="contentId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
   </resultMap>
 </mapper>

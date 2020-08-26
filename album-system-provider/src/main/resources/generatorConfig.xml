@@ -73,36 +73,38 @@
 <!--           <property name="rootInterface" value="com.example.bftest.mapper.CommonMapper"/>-->
         </javaClientGenerator>
 
-
-        <table tableName="t_agency_relationship" domainObjectName="AgencyRelationShip">
+        <table tableName="t_goods_order" domainObjectName="GoodsOrder">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="t_app_user" domainObjectName="AppUser">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_big_goods_picture" domainObjectName="BigGoodsPicture">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_goods" domainObjectName="Goods">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_goods_content" domainObjectName="GoodsContent">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_goods_shopship" domainObjectName="GoodsShopShip">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_small_applcaiton_user" domainObjectName="SmallApplicationUser">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_small_goods_picture" domainObjectName="SmallGoodsPicture">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_user_shop_relation" domainObjectName="UserShopRelation">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="t_web_user" domainObjectName="WebUser">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+<!--        <table tableName="t_agency_relationship" domainObjectName="AgencyRelationShip">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_app_user" domainObjectName="AppUser">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_big_goods_picture" domainObjectName="BigGoodsPicture">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_goods" domainObjectName="Goods">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_goods_content" domainObjectName="GoodsContent">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_shop_switch" domainObjectName="ShopSwitch">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_small_applcaiton_user" domainObjectName="SmallApplicationUser">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_small_goods_picture" domainObjectName="SmallGoodsPicture">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_user_shop_relation" domainObjectName="UserShopRelation">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
+<!--        <table tableName="t_web_user" domainObjectName="WebUser">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
     </context>
 </generatorConfiguration>

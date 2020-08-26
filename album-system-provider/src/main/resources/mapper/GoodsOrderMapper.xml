@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kxg.album.system.provider.mapper.GoodsOrderMapper">
+  <resultMap id="BaseResultMap" type="kxg.album.system.provider.pojo.GoodsOrder">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="goods_id" jdbcType="BIGINT" property="goodsId" />
+    <result column="order_key" jdbcType="VARCHAR" property="orderKey" />
+    <result column="add_user_id" jdbcType="BIGINT" property="addUserId" />
+    <result column="app_user_id" jdbcType="BIGINT" property="appUserId" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+    <result column="web_user_id" jdbcType="BIGINT" property="webUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+</mapper>
