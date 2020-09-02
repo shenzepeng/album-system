@@ -12,6 +12,8 @@ public enum ReturnCode {
     OPEN_ID_CAN_NOT_BE_NULL("50002","openId不能为null"),
     APP_USER_ID_CAN_NOT_BE_NULL("50003","APP商户id不能为空"),
     PLEASE_CHECK_PHONE_NUMBER_AND_PASSWORD("50004","请检查账号密码"),
+    UNION_ID_IS_NOT_RIGHT("50005","union id is not right"),
+
     QUEST_FAIL("99999","请求失败");
 
     private String code;

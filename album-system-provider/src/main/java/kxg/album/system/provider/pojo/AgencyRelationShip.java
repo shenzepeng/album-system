@@ -23,7 +23,7 @@ public class AgencyRelationShip {
     private Long parentId;
 
     /**
-     * 0 一级代理  1二级代理
+     * 0 无法使用app 1一级代理  2二级代理
      */
     private Short type;
 

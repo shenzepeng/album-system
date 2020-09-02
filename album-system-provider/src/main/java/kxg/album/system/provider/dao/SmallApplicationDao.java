@@ -33,4 +33,11 @@ public class SmallApplicationDao {
     public Integer addUser(SmallApplicationUser smallApplicationUser){
         return smallApplicationUserMapper.insertSelective(smallApplicationUser);
     }
+
+    public List<SmallApplicationUser> findUserByIds(List<Long> ids){
+        Example example=new Example(SmallApplicationUser.class);
+        example.createCriteria()
+                .andIn("id",ids);
+        return smallApplicationUserMapper.selectByExample(example);
+    }
 }
