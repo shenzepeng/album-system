@@ -35,8 +35,9 @@ public class GoodsTask {
     private GoodsDicDao goodsDicDao;
     @Autowired
     private GoodsDao goodsDao;
-    @Scheduled(fixedRate=5000)
-    private void addGoods(){
+
+    @Scheduled(fixedRate = 5000)
+    private void addGoods() {
         log.info("执行静态定时任务时间 {}", LocalDateTime.now());
         Map<String, GoodsDic> dicTypeMap = goodsDicDao.findAll().stream().collect(Collectors.toMap(GoodsDic::getType, goodsDic -> goodsDic));
         List<String> dicType = goodsDicDao.findAll()
@@ -44,13 +45,13 @@ public class GoodsTask {
                 .filter(t -> t.getWant().equals((short) 0))
                 .map(GoodsDic::getType)
                 .collect(Collectors.toList());
-        log.info("dicType {}",dicType);
+        log.info("dicType {}", dicType);
         for (String s : dicType) {
-            FindGoodsNumberRequest request=new FindGoodsNumberRequest();
+            FindGoodsNumberRequest request = new FindGoodsNumberRequest();
             request.setSearchInfo(s);
             FindGoodsCountNumbersResponse goodsNumber = goodsService.findGoodsNumber(request);
-            int numbers =(int) goodsNumber.getNumbers();
-            FindGoodsRequest findGoodsRequest=new FindGoodsRequest();
+            int numbers = (int) goodsNumber.getNumbers();
+            FindGoodsRequest findGoodsRequest = new FindGoodsRequest();
             findGoodsRequest.setPageNumber(1);
             findGoodsRequest.setSearchInfo(s);
             findGoodsRequest.setPageSize(numbers);
@@ -75,7 +76,7 @@ public class GoodsTask {
             }).collect(Collectors.toList());
             List<Goods> list = getNeedList(goodsList);
             list.removeAll(Collections.singleton(null));
-            if (CollectionUtils.isEmpty(goodsList)){
+            if (CollectionUtils.isEmpty(goodsList)) {
                 return;
             }
             addGoods(list);
@@ -83,21 +84,48 @@ public class GoodsTask {
 
     }
 
-    private List<Goods>  getNeedList(List<Goods> list){
+    private List<Goods> getNeedList(List<Goods> list) {
         List<String> goodsIndex = list.stream().map(Goods::getGoodsIndex).collect(Collectors.toList());
         List<String> localGoodsIndex = goodsDao.findGoodsByGoodsIndex(goodsIndex).stream().map(Goods::getGoodsIndex).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return list;
         }
         return list.stream().filter(t -> !localGoodsIndex.contains(t.getGoodsIndex())).collect(Collectors.toList());
     }
 
-    private Integer addGoods(List<Goods> goods){
-        if (CollectionUtils.isEmpty(goods)){
+    private Integer addGoods(List<Goods> goods) {
+        if (CollectionUtils.isEmpty(goods)) {
             log.info("当前面没有要添加的数据");
             return 1;
         }
-        return goodsDao.addGoodsList(goods);
+        List<List<Goods>> list = createList(goods, 300);
+        for (List<Goods> goodsList : list) {
+            goodsDao.addGoodsList(goodsList);
+        }
+        return 1;
     }
 
+
+    public static List<List<Goods>> createList(List<Goods> target, int size) {
+        List<List<Goods>> listArr = new ArrayList<List<Goods>>();
+        //获取被拆分的数组个数
+        int arrSize = target.size() % size == 0 ? target.size() / size : target.size() / size + 1;
+        for (int i = 0; i < arrSize; i++) {
+            List<Goods> sub = new ArrayList<Goods>();
+            //把指定索引数据放入到list中
+            for (int j = i * size; j <= size * (i + 1) - 1; j++) {
+                if (j <= target.size() - 1) {
+                    //得到拆分后的集合
+                    sub.add(target.get(j));
+                }
+            }
+            //拆分的集合可以做点什么
+            //sub.dosomething();
+            //将拆分后的集合综合为一个集合
+            listArr.add(sub);
+        }
+        return listArr;
+
+
+    }
 }
