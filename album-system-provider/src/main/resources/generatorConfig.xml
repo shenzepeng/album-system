@@ -73,9 +73,13 @@
 <!--           <property name="rootInterface" value="com.example.bftest.mapper.CommonMapper"/>-->
         </javaClientGenerator>
 
-        <table tableName="t_goods_order" domainObjectName="GoodsOrder">
+        <table tableName="t_good_dic" domainObjectName="GoodsDic">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+
+<!--        <table tableName="t_goods_dic" domainObjectName="GoodsDic">-->
+<!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+<!--        </table>-->
 <!--        <table tableName="t_agency_relationship" domainObjectName="AgencyRelationShip">-->
 <!--            <generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
 <!--        </table>-->

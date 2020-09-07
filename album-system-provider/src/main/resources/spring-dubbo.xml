@@ -1,21 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd        http://dubbo.apache.org/schema/dubbo        http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!-- 本机服务dubbo 服务定义 -->
+    <dubbo:application name="${dubbo.application.name}"
+                       owner="${dubbo.application.owner}"/>
+    <dubbo:annotation/>
+    <dubbo:consumer check="false"/>
+    <!-- 通用配置 -->
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}"/>
+    <dubbo:registry address="${dubbo.registry.address}"/>
+    <dubbo:monitor protocol="${dubbo.monitor.protocol}"/>
+    <dubbo:provider retries="${dubbo.provider.retries}" timeout="${dubbo.provider.timeout}" threads="${dubbo.provider.threads}"/>
 
-    <!-- 提供方应用信息，用于计算依赖关系 -->
-    <dubbo:application name="hello-world-app"  />
+    <!--    <bean id="demoService" class="kxg.oa.kmanager.provider.dubbo.service.impl.DemoServiceImpl"/>-->
+    <!--    <dubbo:service interface="kxg.oa.kmanager.DemoService" ref="demoService"/>-->
 
-    <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="zookeeper://www.shenzepengzuishai.cn:2181" />
-
-    <!-- 用dubbo协议在20880端口暴露服务 -->
-    <dubbo:protocol name="dubbo" port="20880" />
-
-<!--    &lt;!&ndash; 声明需要暴露的服务接口 &ndash;&gt;-->
-<!--    <dubbo:service interface="org.apache.dubbo.demo.DemoService" ref="demoService" />-->
-
-<!--    &lt;!&ndash; 和本地bean一样实现服务 &ndash;&gt;-->
-<!--    <bean id="demoService" class="org.apache.dubbo.demo.provider.DemoServiceImpl" />-->
+    <dubbo:reference id="wsxcGoodsService" interface="kxg.fuck.weishangxiangce.service.service.WSXCGoodsService"
+                     version="1.0.0"
+                     retries="3" timeout="6000" check="true"/>
 </beans>

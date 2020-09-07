@@ -9,7 +9,10 @@
     <result column="goods_name" jdbcType="VARCHAR" property="goodsName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-    <result column="content_id" jdbcType="BIGINT" property="contentId" />
-    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type_id" jdbcType="BIGINT" property="typeId" />
+    <result column="goods_index" jdbcType="VARCHAR" property="goodsIndex" />
+    <result column="small_pic" jdbcType="VARCHAR" property="smallPic" />
+    <result column="big_pic" jdbcType="VARCHAR" property="bigPic" />
   </resultMap>
 </mapper>

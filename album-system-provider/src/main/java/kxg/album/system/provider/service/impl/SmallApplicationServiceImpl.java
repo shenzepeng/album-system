@@ -53,7 +53,7 @@ public class SmallApplicationServiceImpl implements SmallApplicationService {
     @Override
     public SAOpenIdResponse getOpenId(SAOpenIdRequest request) {
         String url = "https://api.weixin.qq.com/sns/jscode2session";
-        Map<String, String> param = new HashMap<>();
+        Map<String, String> param = new HashMap();
         //小程序id
         param.put("appid", appId);
         //微信秘钥

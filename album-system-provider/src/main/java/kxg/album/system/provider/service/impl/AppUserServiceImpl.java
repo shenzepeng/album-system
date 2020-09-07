@@ -13,8 +13,10 @@ import kxg.album.system.provider.exception.KxgException;
 import kxg.album.system.provider.pojo.*;
 import kxg.album.system.provider.service.AppUserService;
 
+import kxg.album.system.provider.utils.JsonUtils;
 import kxg.album.system.request.*;
 import kxg.album.system.response.*;
+import kxg.fuck.weishangxiangce.service.dto.ImgDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +39,7 @@ public class AppUserServiceImpl implements AppUserService {
     @Autowired
     private AgencyRelationShipDao agencyRelationShipDao;
     @Autowired
-    private SmallGoodsPictrueDao smallGoodsPictrueDao;
-    @Autowired
-    private BigGoodsPictureDao bigGoodsPictureDao;
-    @Autowired
     private GoodsOrderDao goodsOrderDao;
-    @Autowired
-    private ContentDao contentDao;
     @Autowired
     private GoodsDao goodsDao;
     @Autowired
@@ -95,12 +91,7 @@ public class AppUserServiceImpl implements AppUserService {
         Map<Long, Goods> idAndGoods = goodsByIds
                 .stream()
                 .collect(Collectors.toMap(Goods::getId, goods -> goods));
-        Map<Long, String> goodsContent = contentDao.goodsContents(goodIds)
-                .stream()
-                .collect(Collectors.toMap(GoodsContent::getId, GoodsContent::getContent));
         //全部小图
-        List<SmallGoodsPicture> smallGoodsPictrueDaoAll = smallGoodsPictrueDao.findAll(goodsId);
-        List<BigGoodsPicture> bigGoodsPictures = bigGoodsPictureDao.goodsPictures(goodsId);
         //小程序信息
         List<Long> addUserId = pageInfo.getList().stream().map(t -> t.getAddUserId()).collect(Collectors.toList());
         Map<Long, SmallApplicationUser> smallApplicationUserMap = smallApplicationDao.findUserByIds(addUserId)
@@ -110,22 +101,17 @@ public class AppUserServiceImpl implements AppUserService {
         List<AppOrderDto> appOrderDtos = pageInfo.getList().stream().map(new Function<GoodsOrder, AppOrderDto>() {
             @Override
             public AppOrderDto apply(GoodsOrder goodsOrder) {
+                Goods goods = idAndGoods.get(goodsOrder.getGoodsId());
                 AppOrderDto appOrderDto=new AppOrderDto();
                 appOrderDto.setGoodsId(goodsOrder.getGoodsId());
                 appOrderDto.setOrderKey(goodsOrder.getOrderKey());
                 appOrderDto.setStatus(goodsOrder.getStatus());
-                List<String> smallPicture=new ArrayList<>();
-                for (SmallGoodsPicture smallGoodsPicture : smallGoodsPictrueDaoAll) {
-                    smallPicture.add( smallGoodsPicture.getImgUrl());
-                }
-                appOrderDto.setSmallPicture(smallPicture);
-                List<String> bigPicture=new ArrayList<>();
-                for (BigGoodsPicture bigGoodsPicture : bigGoodsPictures) {
-                    bigPicture.add(bigGoodsPicture.getImgUrl());
-                }
-                appOrderDto.setBigPicture(bigPicture);
-                appOrderDto.setGoodsName(idAndGoods.get(goodsOrder.getGoodsId()).getGoodsName());
-                appOrderDto.setContent(goodsContent.get(goodsOrder.getId()));
+                ImgDto bigImg = JsonUtils.jsonToPojo(goods.getBigPic(), ImgDto.class);
+                appOrderDto.setBigPicture(bigImg.getImgs());
+                ImgDto smallImg = JsonUtils.jsonToPojo(goods.getSmallPic(), ImgDto.class);
+                appOrderDto.setSmallPicture(smallImg.getImgs());
+                appOrderDto.setGoodsName(goods.getGoodsName());
+                appOrderDto.setContent(goods.getContent());
                 SmallApplicationUser smallApplicationUser = smallApplicationUserMap.get(goodsOrder.getAddUserId());
                 SmallApplicationUserDto smallApplicationUserDto=new SmallApplicationUserDto();
                 BeanUtils.copyProperties(smallApplicationUserDto,smallApplicationUser);

@@ -22,14 +22,22 @@ public class Goods {
     @Column(name = "update_time")
     private Date updateTime;
 
-    @Column(name = "content_id")
-    private Long contentId;
+    private String content;
 
     /**
-     * 店铺id
+     * 类型id
      */
-    @Column(name = "shop_id")
-    private Long shopId;
+    @Column(name = "type_id")
+    private Long typeId;
+
+    @Column(name = "goods_index")
+    private String goodsIndex;
+
+    @Column(name = "small_pic")
+    private String smallPic;
+
+    @Column(name = "big_pic")
+    private String bigPic;
 
     /**
      * @return id
@@ -96,34 +104,76 @@ public class Goods {
     }
 
     /**
-     * @return content_id
+     * @return content
      */
-    public Long getContentId() {
-        return contentId;
+    public String getContent() {
+        return content;
     }
 
     /**
-     * @param contentId
+     * @param content
      */
-    public void setContentId(Long contentId) {
-        this.contentId = contentId;
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 
     /**
-     * 获取店铺id
+     * 获取类型id
      *
-     * @return shop_id - 店铺id
+     * @return type_id - 类型id
      */
-    public Long getShopId() {
-        return shopId;
+    public Long getTypeId() {
+        return typeId;
     }
 
     /**
-     * 设置店铺id
+     * 设置类型id
      *
-     * @param shopId 店铺id
+     * @param typeId 类型id
      */
-    public void setShopId(Long shopId) {
-        this.shopId = shopId;
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    /**
+     * @return goods_index
+     */
+    public String getGoodsIndex() {
+        return goodsIndex;
+    }
+
+    /**
+     * @param goodsIndex
+     */
+    public void setGoodsIndex(String goodsIndex) {
+        this.goodsIndex = goodsIndex == null ? null : goodsIndex.trim();
+    }
+
+    /**
+     * @return small_pic
+     */
+    public String getSmallPic() {
+        return smallPic;
+    }
+
+    /**
+     * @param smallPic
+     */
+    public void setSmallPic(String smallPic) {
+        this.smallPic = smallPic == null ? null : smallPic.trim();
+    }
+
+    /**
+     * @return big_pic
+     */
+    public String getBigPic() {
+        return bigPic;
+    }
+
+    /**
+     * @param bigPic
+     */
+    public void setBigPic(String bigPic) {
+        this.bigPic = bigPic == null ? null : bigPic.trim();
     }
 }

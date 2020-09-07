@@ -3,16 +3,19 @@ package kxg.album.system.provider.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import kxg.album.system.dto.GoodsDto;
+import kxg.album.system.dto.PictureDto;
 import kxg.album.system.provider.constant.ReturnCode;
 import kxg.album.system.provider.dao.*;
 import kxg.album.system.provider.exception.KxgException;
 import kxg.album.system.provider.pojo.*;
 import kxg.album.system.provider.service.GoodsService;
+import kxg.album.system.provider.utils.JsonUtils;
 import kxg.album.system.provider.utils.Md5Util;
 import kxg.album.system.request.AddGoodsOrderRequest;
 import kxg.album.system.request.FindAllGoodsRequest;
 import kxg.album.system.response.AddGoodsOrderResponse;
 import kxg.album.system.response.FindAllGoodsResponse;
+import kxg.fuck.weishangxiangce.service.dto.ImgDto;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,14 +37,7 @@ import java.util.stream.Collectors;
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsDao goodsDao;
-    @Autowired
-    private ContentDao contentDao;
-    @Autowired
-    private SmallGoodsPictrueDao smallGoodsPictrueDao;
-    @Autowired
-    private BigGoodsPictureDao bigGoodsPictureDao;
-    @Autowired
-    private ShopSwitchDao shopSwitchDao;
+
     @Autowired
     private GoodsOrderDao goodsOrderDao;
     @Override
@@ -49,45 +45,34 @@ public class GoodsServiceImpl implements GoodsService {
         /**
          *获取不可以展示的
          */
-        List<ShopSwitch> allByStatus = shopSwitchDao.findAllByStatus((short) 1);
-        List<String> shopIdsList = allByStatus.stream().map(t -> t.getShopId()).collect(Collectors.toList());
-        PageHelper.startPage(request.getPageNumber(),request.getPageSize());
-        List<Goods> allGoods = goodsDao.findAllGoods(request.getGoodsName(),shopIdsList);
-        PageInfo<Goods> goodsPageInfo=new PageInfo<>(allGoods);
-        List<Goods> list = goodsPageInfo.getList();
+        int offset=(request.getPageNumber()-1)*request.getPageSize();
+        List<Goods> allGoods = goodsDao.findAllGoodsByContent(offset,request.getPageSize(),request.getGoodsName());
+        //商品总数
+        int goodsNumber = goodsDao.findAllGoodsNumber(request.getGoodsName());
         //获取内容id
-        List<Long> contentList = list.stream().map(t -> t.getContentId()).collect(Collectors.toList());
-        List<GoodsContent> goodsContents = contentDao.goodsContents(contentList);
-        Map<Long, String> content = goodsContents.stream().collect(Collectors.toMap(GoodsContent::getId, GoodsContent -> GoodsContent.getContent()));
-        //商品id
-        List<Long> goodsId=list.stream().map(t->t.getId()).collect(Collectors.toList());
         //全部小图
-        List<SmallGoodsPicture> smallGoodsPictrueDaoAll = smallGoodsPictrueDao.findAll(goodsId);
-        List<BigGoodsPicture> bigGoodsPictures = bigGoodsPictureDao.goodsPictures(goodsId);
-        List<GoodsDto> goodsDtos = list.stream().map(new Function<Goods, GoodsDto>() {
+        List<GoodsDto> goodsDtos = allGoods.stream().map(new Function<Goods, GoodsDto>() {
             @Override
             public GoodsDto apply(Goods goods) {
                 GoodsDto goodsDto=new GoodsDto();
                 goodsDto.setCreateTime(goods.getCreateTime());
                 goodsDto.setUpdateTime(goods.getUpdateTime());
                 goodsDto.setGoodsName(goods.getGoodsName());
-                goodsDto.setContent(content.get(goods.getContentId()));
-                List<String> smallPicture=new ArrayList<>();
-                for (SmallGoodsPicture smallGoodsPicture : smallGoodsPictrueDaoAll) {
-                    smallPicture.add( smallGoodsPicture.getImgUrl());
-                }
-                goodsDto.setSmallPicture(smallPicture);
-                List<String> bigPicture=new ArrayList<>();
-                for (BigGoodsPicture bigGoodsPicture : bigGoodsPictures) {
-                    bigPicture.add(bigGoodsPicture.getImgUrl());
-                }
+                goodsDto.setContent(goods.getContent());
+                ImgDto bigDto = JsonUtils.jsonToPojo(goods.getBigPic(), ImgDto.class);
+                PictureDto bigPicture=new PictureDto();
+                bigPicture.setImgUrls(bigDto.getImgs());
                 goodsDto.setBigPicture(bigPicture);
+                ImgDto smallDto = JsonUtils.jsonToPojo(goods.getSmallPic(), ImgDto.class);
+                PictureDto smallPicture=new PictureDto();
+                smallPicture.setImgUrls(smallDto.getImgs());
+                goodsDto.setSmallPic(smallPicture);
                 return goodsDto;
             }
         }).collect(Collectors.toList());
         FindAllGoodsResponse findAllGoodsResponse=new FindAllGoodsResponse();
         findAllGoodsResponse.setGoodsDtos(goodsDtos);
-        findAllGoodsResponse.setTotal(goodsPageInfo.getTotal());
+        findAllGoodsResponse.setTotal(goodsNumber);
         return findAllGoodsResponse;
     }
 

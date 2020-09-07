@@ -2,10 +2,12 @@ package kxg.album.system.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 要写注释呀
  */
 @Data
 public class PictureDto {
-    private String imgUrl;
+    private List<String> imgUrls;
 }

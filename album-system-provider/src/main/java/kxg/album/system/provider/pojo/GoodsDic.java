@@ -3,19 +3,24 @@ package kxg.album.system.provider.pojo;
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "t_goods_content")
-public class GoodsContent {
+@Table(name = "t_good_dic")
+public class GoodsDic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String content;
+    private String type;
 
     @Column(name = "create_time")
     private Date createTime;
 
     @Column(name = "update_time")
     private Date updateTime;
+
+    /**
+     * 0想要 1不想要
+     */
+    private Short want;
 
     /**
      * @return id
@@ -32,17 +37,17 @@ public class GoodsContent {
     }
 
     /**
-     * @return content
+     * @return type
      */
-    public String getContent() {
-        return content;
+    public String getType() {
+        return type;
     }
 
     /**
-     * @param content
+     * @param type
      */
-    public void setContent(String content) {
-        this.content = content == null ? null : content.trim();
+    public void setType(String type) {
+        this.type = type == null ? null : type.trim();
     }
 
     /**
@@ -71,5 +76,23 @@ public class GoodsContent {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    /**
+     * 获取0想要 1不想要
+     *
+     * @return want - 0想要 1不想要
+     */
+    public Short getWant() {
+        return want;
+    }
+
+    /**
+     * 设置0想要 1不想要
+     *
+     * @param want 0想要 1不想要
+     */
+    public void setWant(Short want) {
+        this.want = want;
     }
 }

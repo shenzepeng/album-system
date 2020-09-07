@@ -44,7 +44,7 @@ public class AppUserDao {
 
     public List<AppUser> findUserByIds(List<Long> ids){
         if (CollectionUtils.isEmpty(ids)){
-            return new ArrayList<>();
+            return new ArrayList();
         }
         Example example=new Example(AppUser.class);
         example.createCriteria()

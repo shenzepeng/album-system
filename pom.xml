@@ -75,15 +75,55 @@
         </dependency>
 
     </dependencies>
+    <distributionManagement>
+        <!--配置线上releases仓库地址，只要是正式版本都会上传到该地址（注意要和settings.xml文件里面的配置名称相同）-->
+        <repository>
+            <id>releases</id>
+            <url>http://www.shenzepengzuishuai.cn:8081/repository/maven-releases/</url>
+        </repository>
+        <!--配置线上Snapshots仓库地址，只要是快照版本都会上传到该地址（注意要和settings.xml文件里面的配置名称相同）-->
+        <snapshotRepository>
+            <id>snapshots</id>
+            <url>http://www.shenzepengzuishuai.cn:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <id>public</id>
+            <name>Public Repositories</name>
+            <url>http://www.shenzepengzuishuai.cn:8081/repository/maven-public/</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <verbose>true</verbose>
+                    <fork>true</fork>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
