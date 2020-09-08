@@ -190,6 +190,19 @@ public class AppUserServiceImpl implements AppUserService {
         return response;
     }
 
+    @Override
+    public UpdateAppUserInfoResponse updateAppUser(UpdateAppUserInfoRequest request) {
+        if (null==request.getId()){
+            throw new KxgException(ReturnCode.USER_ID_IS_NOT_RIGHT);
+        }
+        AppUser appUser=new AppUser();
+        BeanUtils.copyProperties(request,appUser);
+        Integer result = appUserDao.updateUser(appUser);
+        UpdateAppUserInfoResponse response=new UpdateAppUserInfoResponse();
+        response.setResult(result);
+        return response;
+    }
+
     private void addAppUser(AppUser appUser){
         appUserDao.addUser(appUser);
     }

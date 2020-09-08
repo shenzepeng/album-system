@@ -5,6 +5,7 @@ import kxg.album.system.provider.pojo.AppUser;
 import kxg.album.system.request.*;
 
 import kxg.album.system.response.*;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 要写注释呀
@@ -16,4 +17,5 @@ public interface AppUserService {
     FindSecondaryByPhoneNumberResponse findSecondaryByPhoneNumber(FindSecondaryByPhoneNumberRequest request);
     AddSecondaryResponse addSecondary(AddSecondaryRequest request);
     UpdateAryResponse updateAry(UpdateAryRequest request);
+    UpdateAppUserInfoResponse updateAppUser(UpdateAppUserInfoRequest request);
 }

@@ -68,4 +68,11 @@ public class AppUserController {
     public KxgResponse<AddSecondaryResponse> addSecondaryResponse(@RequestBody AddSecondaryRequest request){
         return KxgResponse.ok(appUserService.addSecondary(request));
     }
+    /**
+     * 更新appUser
+     */
+    @PostMapping("put/user/info")
+    public KxgResponse<UpdateAppUserInfoResponse> update(@RequestBody UpdateAppUserInfoRequest request){
+        return KxgResponse.ok(appUserService.updateAppUser(request));
+    }
 }
