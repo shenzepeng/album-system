@@ -4,6 +4,7 @@ package kxg.album.system.response;
 import kxg.album.system.dto.AppOrderDto;
 import lombok.Data;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,6 +13,6 @@ import java.util.List;
 @Data
 public class FindAppOrderInfoResponse implements Serializable {
     private static final long serialVersionUID = 3344351565377897291L;
-    private List<AppOrderDto> dtos;
-    private long total;
+    private List<AppOrderDto> dtos=new ArrayList<>();
+    private int total=0;
 }

@@ -20,6 +20,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -47,10 +48,13 @@ public class GoodsTask {
                 .collect(Collectors.toList());
         log.info("dicType {}", dicType);
         for (String s : dicType) {
+            List<GoodsDto> goodsDtos = new ArrayList();
             FindGoodsNumberRequest request = new FindGoodsNumberRequest();
             request.setSearchInfo(s);
             FindGoodsCountNumbersResponse goodsNumber = goodsService.findGoodsNumber(request);
+            
             int numbers = (int) goodsNumber.getNumbers();
+
             FindGoodsRequest findGoodsRequest = new FindGoodsRequest();
             findGoodsRequest.setPageNumber(1);
             findGoodsRequest.setSearchInfo(s);
@@ -121,6 +125,12 @@ public class GoodsTask {
             }
             //拆分的集合可以做点什么
             //sub.dosomething();
+            sub.stream().peek(new Consumer<Goods>() {
+                @Override
+                public void accept(Goods goods) {
+                    log.info("add goods info{}",goods);
+                }
+            });
             //将拆分后的集合综合为一个集合
             listArr.add(sub);
         }

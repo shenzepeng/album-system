@@ -53,4 +53,6 @@ public class AppUserLoginResponse implements Serializable {
     private String openId;
 
     private String token;
+
+    private Short type;
 }

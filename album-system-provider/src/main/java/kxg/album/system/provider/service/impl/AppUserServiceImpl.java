@@ -21,7 +21,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,27 +46,31 @@ public class AppUserServiceImpl implements AppUserService {
     private GoodsDao goodsDao;
     @Autowired
     private SmallApplicationDao smallApplicationDao;
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public AppUserLoginResponse login(AppUserLoginRequest request) {
         AppUserLoginResponse response=new AppUserLoginResponse();
         AppUser appUser=new AppUser();
         if (!StringUtils.isEmpty(request.getUnionId())){
             List<AppUser> userByUnionId = appUserDao.findUserByUnionId(request.getUnionId());
-            if (CollectionUtils.isEmpty(userByUnionId)){
+            if (!CollectionUtils.isEmpty(userByUnionId)){
                 BeanUtils.copyProperties(request,appUser);
                 BeanUtils.copyProperties(appUser,response);
                 addAppUser(appUser);
+                addNewAgency(appUser.getId());
                 return response;
             }
             BeanUtils.copyProperties(userByUnionId.get(0),response);
+            response.setType(findUserType(userByUnionId.get(0).getId()));
             return response;
         }
         if (!StringUtils.isEmpty(request.getPhoneNumber())) {
             List<AppUser> login = appUserDao.login(request.getPhoneNumber());
-            if (CollectionUtils.isEmpty(login)){
+            if (!CollectionUtils.isEmpty(login)){
                 BeanUtils.copyProperties(request,appUser);
                 BeanUtils.copyProperties(appUser,response);
                 addAppUser(appUser);
+                response.setType(findUserType(login.get(0).getId()));
                 return response;
             }
             if (StringUtils.isEmpty(request.getPassword())||!request.getPassword().equals(login.get(0).getPassword())){
@@ -75,30 +81,33 @@ public class AppUserServiceImpl implements AppUserService {
 
         }
         throw new KxgException(ReturnCode.PLEASE_CHECK_PHONE_NUMBER_AND_PASSWORD);
+
     }
 
     @Override
     public FindAppOrderInfoResponse findAppOrderInfo(FindAppOrderInfoRequest request) {
-        PageHelper.startPage(request.getPageNumber(),request.getPageSize());
-        List<GoodsOrder> orderList = goodsOrderDao.findOrderList(request.getStatus(), request.getOrderKey(), request.getAppUserId());
-        PageInfo<GoodsOrder> pageInfo=new PageInfo<>(orderList);
+        int orderListNumbers = goodsOrderDao.findOrderListNumbers(request.getStatus(), request.getOrderKey(), request.getAppUserId());
         FindAppOrderInfoResponse response=new FindAppOrderInfoResponse();
-        response.setTotal(pageInfo.getTotal());
-        List<Long> goodsId = pageInfo.getList().stream().map(t -> t.getGoodsId()).collect(Collectors.toList());
+        if (orderListNumbers==0){
+            return response;
+        }
+        int offset=(request.getPageNumber()-1)*request.getPageSize();
+        List<GoodsOrder> orderList = goodsOrderDao.findOrderList(request.getStatus(), request.getOrderKey(), request.getAppUserId(),offset,request.getPageSize());
+        response.setTotal(orderListNumbers);
+        List<Long> goodsId = orderList.stream().map(t -> t.getGoodsId()).collect(Collectors.toList());
         List<Goods> goodsByIds = goodsDao.findGoodsByIds(goodsId);
-        List<Long> goodIds = goodsByIds.stream().map(t -> t.getId()).collect(Collectors.toList());
-        //全部商品信息
+         //全部商品信息
         Map<Long, Goods> idAndGoods = goodsByIds
                 .stream()
                 .collect(Collectors.toMap(Goods::getId, goods -> goods));
         //全部小图
         //小程序信息
-        List<Long> addUserId = pageInfo.getList().stream().map(t -> t.getAddUserId()).collect(Collectors.toList());
+        List<Long> addUserId = orderList.stream().map(t -> t.getAddUserId()).collect(Collectors.toList());
         Map<Long, SmallApplicationUser> smallApplicationUserMap = smallApplicationDao.findUserByIds(addUserId)
                 .stream()
                 .collect(Collectors.toMap(SmallApplicationUser::getId, smallApplicationUser -> smallApplicationUser));
         //构建订单信息
-        List<AppOrderDto> appOrderDtos = pageInfo.getList().stream().map(new Function<GoodsOrder, AppOrderDto>() {
+        List<AppOrderDto> appOrderDtos = orderList.stream().map(new Function<GoodsOrder, AppOrderDto>() {
             @Override
             public AppOrderDto apply(GoodsOrder goodsOrder) {
                 Goods goods = idAndGoods.get(goodsOrder.getGoodsId());
@@ -185,5 +194,16 @@ public class AppUserServiceImpl implements AppUserService {
         appUserDao.addUser(appUser);
     }
 
+    private void addNewAgency(Long userId){
+        AgencyRelationShip agencyRelationShip=new AgencyRelationShip();
+        agencyRelationShip.setType((short)0);
+        agencyRelationShip.setParentId((long)0);
+        agencyRelationShip.setUserId(userId);
+        agencyRelationShipDao.add(agencyRelationShip);;
+    }
 
+    private Short findUserType(Long userId){
+        List<AgencyRelationShip> allByUserId = agencyRelationShipDao.findAllByUserId(userId);
+        return allByUserId.get(0).getType();
+    }
 }
