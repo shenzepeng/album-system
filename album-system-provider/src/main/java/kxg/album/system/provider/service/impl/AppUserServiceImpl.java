@@ -53,7 +53,7 @@ public class AppUserServiceImpl implements AppUserService {
         AppUser appUser=new AppUser();
         if (!StringUtils.isEmpty(request.getUnionId())){
             List<AppUser> userByUnionId = appUserDao.findUserByUnionId(request.getUnionId());
-            if (!CollectionUtils.isEmpty(userByUnionId)){
+            if (CollectionUtils.isEmpty(userByUnionId)){
                 BeanUtils.copyProperties(request,appUser);
                 BeanUtils.copyProperties(appUser,response);
                 addAppUser(appUser);
@@ -66,7 +66,7 @@ public class AppUserServiceImpl implements AppUserService {
         }
         if (!StringUtils.isEmpty(request.getPhoneNumber())) {
             List<AppUser> login = appUserDao.login(request.getPhoneNumber());
-            if (!CollectionUtils.isEmpty(login)){
+            if (CollectionUtils.isEmpty(login)){
                 BeanUtils.copyProperties(request,appUser);
                 BeanUtils.copyProperties(appUser,response);
                 addAppUser(appUser);

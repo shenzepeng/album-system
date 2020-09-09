@@ -1,5 +1,6 @@
 package kxg.album.system.provider.task;
 
+import com.ctrip.framework.apollo.ConfigService;
 import kxg.album.system.provider.dao.GoodsDao;
 import kxg.album.system.provider.dao.GoodsDicDao;
 import kxg.album.system.provider.pojo.Goods;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -39,6 +41,10 @@ public class GoodsTask {
 
     @Scheduled(fixedRate = 5000)
     private void addGoods() {
+        String swith = ConfigService.getAppConfig().getProperty("get.wsxc.goods.swith", "close");
+        if (StringUtils.isEmpty(swith)||swith.equals("close")){
+            return;
+        }
         log.info("执行静态定时任务时间 {}", LocalDateTime.now());
         Map<String, GoodsDic> dicTypeMap = goodsDicDao.findAll().stream().collect(Collectors.toMap(GoodsDic::getType, goodsDic -> goodsDic));
         List<String> dicType = goodsDicDao.findAll()
