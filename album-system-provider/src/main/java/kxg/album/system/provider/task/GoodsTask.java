@@ -65,18 +65,20 @@ public class GoodsTask {
             String goodsNumbersValue = HttpClientUtil.doPostJson(goodsNumberUrl, JsonUtils.objectToJson(request));
             String goodsInfoUrlValue = ConfigService.getAppConfig().getProperty("wxsc.findGoods.info.url", "");
             GoodsNumbersRoot goodsNumbersRoot = JsonUtils.jsonToPojo(goodsNumbersValue, GoodsNumbersRoot.class);
-            List<Integer> ids=new ArrayList<>();
+            List<Integer> ids = new ArrayList<>();
             for (int i = 0; i < goodsNumbersRoot.getData().getNumbers(); i++) {
                 ids.add(i);
             }
-            log.info("goodsNumbersValue {}", ids);
-            List<List<Integer>> list = createList(ids, 300);
-            for (int i = 0; i < list.size(); i++) {
-                List<Integer> integerList = list.get(i);
+            log.info("goodsNumbersValue {}", ids.size());
+            List<List<Integer>> list = createList(ids, 200);
+            log.info(" List<List<Integer>> list {}", list.size());
+            int i=0;
+            for (List<Integer> integerList : list) {
                 FindGoodsRequest findGoodsRequest = new FindGoodsRequest();
                 findGoodsRequest.setSearchInfo(s);
                 findGoodsRequest.setPageSize(integerList.size());
                 findGoodsRequest.setPageNumber(i);
+                log.info("FindGoodsRequest findGoodsRequest {}", findGoodsRequest);
                 String goodInfoValues = HttpClientUtil.doPostJson(goodsInfoUrlValue, JsonUtils.objectToJson(findGoodsRequest));
                 GoodsInfoRoot goodsInfoRoot = JsonUtils.jsonToPojo(goodInfoValues, GoodsInfoRoot.class);
                 List<String> goodsIndex = goodsInfoRoot.getData().getGoodsDtos()
@@ -87,11 +89,12 @@ public class GoodsTask {
                         .stream()
                         .map(Goods::getGoodsIndex)
                         .collect(Collectors.toList());
-                log.info("goodInfoValues {}", goodsInfoRoot);
+                log.info("goodInfoValues {}", goodsInfoRoot.getData().getGoodsDtos().size());
                 List<Goods> goodsList = goodsInfoRoot.getData().getGoodsDtos()
                         .stream()
                         .filter(t -> !t.getContent().contains("衣") || !t.getContent().contains("裤") || !t.getContent().contains("包"))
-                        .filter(t->!goodsIndexs.contains(t.getGoodsIndex()))
+                        .filter(t -> !goodsIndexs.contains(t.getGoodsIndex()))
+                        .peek(t -> log.info("goodsInfoRoot.getData().getGoodsDtos() {}", t.getGoodsIndex()))
                         .map(new Function<GoodsDtos, Goods>() {
                             @Override
                             public Goods apply(GoodsDtos goodsDto) {
@@ -102,66 +105,34 @@ public class GoodsTask {
                                 ImgDto imgDtoSmall = new ImgDto();
                                 imgDtoSmall.setImgs(goodsDto.getSmallPicture());
                                 good.setSmallPic(JsonUtils.objectToJson(imgDtoSmall));
-                                good.setGoodsName(goodsDto.getGoodsName());
-                                good.setContent(goodsDto.getContent());
+                                if (StringUtils.isEmpty(goodsDto.getGoodsName())) {
+                                    good.setGoodsName("");
+                                }
+                                good.setContent(goodsDto.getContent().replaceAll("\\d+", ""));
                                 good.setGoodsIndex(goodsDto.getGoodsIndex());
                                 good.setCreateTime(new Date());
                                 good.setTypeId(dicTpyeMap.get(s));
                                 return good;
                             }
                         }).collect(Collectors.toList());
-
+                i++;
+                log.info("now index values {}",i);
                 goodsList.removeAll(Collections.singleton(null));
                 if (CollectionUtils.isEmpty(goodsList)) {
-                    return;
+                    continue;
                 }
                 addGoods(goodsList);
             }
         }
+
     }
 
 
     private Integer addGoods(List<Goods> goods) {
-        if (CollectionUtils.isEmpty(goods)) {
-            log.info("当前面没有要添加的数据");
-            return 1;
-        }
-        List<List<Goods>> list = createGoodsList(goods, 300);
-        for (List<Goods> goodsList : list) {
-            goodsDao.addGoodsList(goodsList);
-        }
-        return 1;
-    }
-
-
-    public static List<List<Goods>> createGoodsList(List<Goods> target, int size) {
-        List<List<Goods>> listArr = new ArrayList<List<Goods>>();
-        //获取被拆分的数组个数
-        int arrSize = target.size() % size == 0 ? target.size() / size : target.size() / size + 1;
-        for (int i = 0; i < arrSize; i++) {
-            List<Goods> sub = new ArrayList<Goods>();
-            //把指定索引数据放入到list中
-            for (int j = i * size; j <= size * (i + 1) - 1; j++) {
-                if (j <= target.size() - 1) {
-                    //得到拆分后的集合
-                    sub.add(target.get(j));
-                }
-            }
-            //拆分的集合可以做点什么
-            //sub.dosomething();
-            sub.stream().peek(new Consumer<Goods>() {
-                @Override
-                public void accept(Goods goods) {
-                    log.info("add goods info{}",goods);
-                }
-            });
-            //将拆分后的集合综合为一个集合
-            listArr.add(sub);
-        }
-        return listArr;
-
+        return   goodsDao.addGoodsList(goods);
 
     }
+
 
     public static List<List<Integer>> createList(List<Integer> target, int size) {
         List<List<Integer>> listArr = new ArrayList<List<Integer>>();
@@ -188,7 +159,6 @@ public class GoodsTask {
             listArr.add(sub);
         }
         return listArr;
-
-
     }
+
 }
