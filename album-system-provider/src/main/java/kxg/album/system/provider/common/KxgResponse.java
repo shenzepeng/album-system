@@ -1,9 +1,9 @@
 package kxg.album.system.provider.common;
-
+import kxg.album.system.provider.cache.VersionCache;
 import kxg.album.system.provider.constant.ReturnCode;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -11,15 +11,28 @@ import java.io.Serializable;
  * 要写注释呀
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Component
+@Scope("prototype")
 public class KxgResponse<T> {
     private String code;
     private String message;
     private T data;
+    private VersionDto version;
+    public KxgResponse(String code, String message, T data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
 
-    public static KxgResponse error(){
-        return create(ReturnCode.QUEST_FAIL, null);
+    public KxgResponse(String code, String message, T data, VersionDto versionDto) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+        this.version = versionDto;
+    }
+
+    public static <K extends Serializable> KxgResponse error(K data){
+        return create(ReturnCode.QUEST_FAIL, data);
     }
     public static <K extends Serializable> KxgResponse ok(K data){
         return create(ReturnCode.SUCCESS, data);
@@ -28,9 +41,9 @@ public class KxgResponse<T> {
         return create(ReturnCode.SUCCESS, null);
     }
     public static <K extends Serializable> KxgResponse create(ReturnCode returnCode, K data){
-        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), data);
+        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), data,new VersionDto(VersionCache.version,VersionCache.type));
     }
     public static KxgResponse create(ReturnCode returnCode){
-        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), null);
+        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(),null,new VersionDto(VersionCache.version,VersionCache.type));
     }
 }

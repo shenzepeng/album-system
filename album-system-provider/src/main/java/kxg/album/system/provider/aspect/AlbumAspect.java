@@ -1,5 +1,6 @@
 package kxg.album.system.provider.aspect;
 
+import kxg.album.system.provider.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,11 +31,12 @@ public class AlbumAspect {
     @After("Pointcut()")
     public void afterMethod(JoinPoint joinPoint){
         log.info("调用了后置通知");
+
     }
     //@AfterRunning: 返回通知 rsult为返回内容
     @AfterReturning(value="Pointcut()",returning="result")
     public void afterReturningMethod(JoinPoint joinPoint,Object result){
-        log.info("调用了返回通知");
+        log.info("调用了返回通知 {}", JsonUtils.objectToJson(result));
     }
     //@AfterThrowing: 异常通知
     @AfterThrowing(value="Pointcut()",throwing="e")

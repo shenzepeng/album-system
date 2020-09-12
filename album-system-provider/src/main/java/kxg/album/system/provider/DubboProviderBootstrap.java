@@ -11,7 +11,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @EnableApolloConfig(value = {"dubbo","application","dataSource","redis"})
-@EnableSwagger2
+//@EnableSwagger2
 @EnableScheduling
 @MapperScan("kxg.album.system.provider.mapper")
 @ImportResource(locations = {"classpath:spring-dubbo.xml"})
