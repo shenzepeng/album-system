@@ -67,4 +67,8 @@ public class GoodsDao {
     public Integer addGoodsList(List<Goods> goods){
         return goodsMapper.insertList(goods);
     }
+
+    public List<Goods> findRandGoods(Integer numbers){
+        return goodsMapper.findRandGoods(numbers);
+    }
 }

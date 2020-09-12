@@ -12,6 +12,7 @@ import java.util.Date;
 public class AppUserLoginResponse implements Serializable {
 
     private static final long serialVersionUID = 2981162340463913273L;
+    private Long id;
     /**
      * 普通用户昵称
      */

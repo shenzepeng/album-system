@@ -13,9 +13,12 @@ import kxg.album.system.provider.utils.JsonUtils;
 import kxg.album.system.provider.utils.Md5Util;
 import kxg.album.system.request.AddGoodsOrderRequest;
 import kxg.album.system.request.FindAllGoodsRequest;
+import kxg.album.system.request.GetSupportGoodsRequest;
 import kxg.album.system.response.AddGoodsOrderResponse;
 import kxg.album.system.response.FindAllGoodsResponse;
+import kxg.album.system.response.GetSupportGoodsResponse;
 import kxg.fuck.weishangxiangce.service.dto.ImgDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +35,7 @@ import java.util.stream.Collectors;
 /**
  * 要写注释呀
  */
-
+@Slf4j
 @Service
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
@@ -55,6 +58,7 @@ public class GoodsServiceImpl implements GoodsService {
             @Override
             public GoodsDto apply(Goods goods) {
                 GoodsDto goodsDto=new GoodsDto();
+                goodsDto.setId(goods.getId());
                 goodsDto.setCreateTime(goods.getCreateTime());
                 goodsDto.setUpdateTime(goods.getUpdateTime());
                 goodsDto.setGoodsName(goods.getGoodsName());
@@ -88,6 +92,41 @@ public class GoodsServiceImpl implements GoodsService {
         goodsOrderDao.addGoodsOrder(goodsOrder);
         AddGoodsOrderResponse response=new AddGoodsOrderResponse();
         response.setOrderKey(orderKey);
+        return response;
+    }
+
+    @Override
+    public GetSupportGoodsResponse getSupport(GetSupportGoodsRequest request) {
+        if (request.getGoodsNums()>10){
+            request.setGoodsNums(10);
+        }else if (request.getGoodsNums()<1){
+            request.setGoodsNums(1);
+        }
+        List<Goods> randGoods = goodsDao.findRandGoods(request.getGoodsNums());
+        List<GoodsDto> goodsDto = randGoods.stream()
+                .peek(t->log.info("GetSupportGoodsResponse {}",t))
+                .map(new Function<Goods, GoodsDto>() {
+            @Override
+            public GoodsDto apply(Goods goods) {
+                GoodsDto goodsDto=new GoodsDto();
+                goodsDto.setId(goods.getId());
+                goodsDto.setCreateTime(goods.getCreateTime());
+                goodsDto.setUpdateTime(goods.getUpdateTime());
+                goodsDto.setGoodsName(goods.getGoodsName());
+                goodsDto.setContent(goods.getContent());
+                ImgDto bigDto = JsonUtils.jsonToPojo(goods.getBigPic(), ImgDto.class);
+                PictureDto bigPicture=new PictureDto();
+                bigPicture.setImgUrls(bigDto.getImgs());
+                goodsDto.setBigPicture(bigPicture);
+                ImgDto smallDto = JsonUtils.jsonToPojo(goods.getSmallPic(), ImgDto.class);
+                PictureDto smallPicture=new PictureDto();
+                smallPicture.setImgUrls(smallDto.getImgs());
+                goodsDto.setSmallPic(smallPicture);
+                return goodsDto;
+            }
+        }).collect(Collectors.toList());
+        GetSupportGoodsResponse response=new GetSupportGoodsResponse();
+        response.setGoodsDtos(goodsDto);
         return response;
     }
 

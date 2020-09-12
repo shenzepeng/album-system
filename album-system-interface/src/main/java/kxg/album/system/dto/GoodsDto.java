@@ -18,4 +18,5 @@ public class GoodsDto implements Serializable {
     private String content;
     private PictureDto smallPic;
     private PictureDto bigPicture;
+    private Long id;
 }

@@ -1,8 +1,10 @@
 package kxg.album.system.provider.pojo;
 
+import lombok.Data;
+
 import java.util.Date;
 import javax.persistence.*;
-
+@Data
 @Table(name = "t_goods")
 public class Goods {
     @Id

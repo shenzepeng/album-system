@@ -58,4 +58,5 @@ public class GoodsOrderDao {
         }
         return goodsOrderMapper.selectCountByExample(example);
     }
+    
 }

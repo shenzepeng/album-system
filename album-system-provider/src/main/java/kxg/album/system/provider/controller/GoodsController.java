@@ -4,8 +4,10 @@ import kxg.album.system.provider.common.KxgResponse;
 import kxg.album.system.provider.service.GoodsService;
 import kxg.album.system.request.AddGoodsOrderRequest;
 import kxg.album.system.request.FindAllGoodsRequest;
+import kxg.album.system.request.GetSupportGoodsRequest;
 import kxg.album.system.response.AddGoodsOrderResponse;
 import kxg.album.system.response.FindAllGoodsResponse;
+import kxg.album.system.response.GetSupportGoodsResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +27,11 @@ public class GoodsController {
     @PostMapping("new/order")
     public KxgResponse<AddGoodsOrderResponse> addNewOrder(@RequestBody AddGoodsOrderRequest request){
         return KxgResponse.ok(goodsService.addNewOrder(request));
+    }
+
+    @PostMapping("find/support")
+    public KxgResponse<GetSupportGoodsResponse> findSupport(@RequestBody GetSupportGoodsRequest request){
+        return KxgResponse.ok(goodsService.getSupport(request));
     }
 
 }

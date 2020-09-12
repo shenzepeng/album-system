@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
     <!-- 本机服务dubbo 服务定义 -->
-    <dubbo:application name="${dubbo.application.name}"
+    <dubbo:application name="album"
                        owner="${dubbo.application.owner}"/>
     <dubbo:annotation/>
     <dubbo:consumer check="false"/>
@@ -17,7 +17,7 @@
     <!--    <bean id="demoService" class="kxg.oa.kmanager.provider.dubbo.service.impl.DemoServiceImpl"/>-->
     <!--    <dubbo:service interface="kxg.oa.kmanager.DemoService" ref="demoService"/>-->
 
-    <dubbo:reference id="wsxcGoodsService" interface="kxg.fuck.weishangxiangce.service.service.WSXCGoodsService"
-                     version="1.0.0"
-                     retries="3" timeout="6000" check="true"/>
+<!--    <dubbo:reference id="wsxcGoodsService" interface="kxg.fuck.weishangxiangce.service.service.WSXCGoodsService"-->
+<!--                     version="1.0.0"-->
+<!--                     retries="3" timeout="6000" check="true"/>-->
 </beans>
