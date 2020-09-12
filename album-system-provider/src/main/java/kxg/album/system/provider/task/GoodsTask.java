@@ -92,7 +92,7 @@ public class GoodsTask {
                 log.info("goodInfoValues {}", goodsInfoRoot.getData().getGoodsDtos().size());
                 List<Goods> goodsList = goodsInfoRoot.getData().getGoodsDtos()
                         .stream()
-                        .filter(t -> !t.getContent().contains("衣") || !t.getContent().contains("裤") || !t.getContent().contains("包"))
+                        .filter(t -> !t.getContent().contains("衣") && !t.getContent().contains("裤") &&  !t.getContent().contains("包"))
                         .filter(t -> !goodsIndexs.contains(t.getGoodsIndex()))
                         .peek(t -> log.info("goodsInfoRoot.getData().getGoodsDtos() {}", t.getGoodsIndex()))
                         .map(new Function<GoodsDtos, Goods>() {
