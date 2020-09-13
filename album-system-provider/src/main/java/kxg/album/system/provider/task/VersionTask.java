@@ -21,9 +21,11 @@ import springfox.documentation.spring.web.json.Json;
 @Component
 @Slf4j
 public class VersionTask {
-    @Scheduled(fixedRate = 5000)
+
+    @Scheduled(fixedRate = 5)
     public void getNewVersion(){
         String versionUrl = ConfigService.getAppConfig().getProperty("get.app.version.url", "");
+        log.info("get.app.version.url {}",versionUrl);
         if (StringUtils.isEmpty(versionUrl)){
             return;
         }
@@ -34,6 +36,7 @@ public class VersionTask {
         request.setSystem(system);
         String doPost = HttpClientUtil.doPostJson(versionUrl, JsonUtils.objectToJson(request));
         VersionRoot versionRoot = JsonUtils.jsonToPojo(doPost, VersionRoot.class);
+        log.info("VersionRoot {},FindAppVersionRequest request {}",versionRoot,request);
         VersionCache.AndroidVersionType=versionRoot.getData().getVersionDto().getType();
         VersionCache.AndroidVersion=versionRoot.getData().getVersionDto().getVersion();
         VersionCache.AndroidUrl=versionRoot.getData().getVersionDto().getUrl();

@@ -42,9 +42,9 @@ public class KxgResponse<T> {
         return create(ReturnCode.SUCCESS, null);
     }
     public static <K extends Serializable> KxgResponse create(ReturnCode returnCode, K data){
-        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), data,new VersionDto(VersionCache.version,VersionCache.type,VersionCache.url));
+        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), data,new VersionDto(VersionCache.AndroidVersion,VersionCache.AndroidVersionType,VersionCache.AndroidUrl));
     }
     public static KxgResponse create(ReturnCode returnCode){
-        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(),null,new VersionDto(VersionCache.version,VersionCache.type,VersionCache.url));
+        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(),null,new VersionDto(VersionCache.AndroidVersion,VersionCache.AndroidVersionType,VersionCache.AndroidUrl));
     }
 }
