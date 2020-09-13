@@ -1,6 +1,7 @@
 package kxg.album.system.provider.common;
 import kxg.album.system.provider.cache.VersionCache;
 import kxg.album.system.provider.constant.ReturnCode;
+import kxg.album.system.provider.dto.VersionDto;
 import lombok.Data;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -41,9 +42,9 @@ public class KxgResponse<T> {
         return create(ReturnCode.SUCCESS, null);
     }
     public static <K extends Serializable> KxgResponse create(ReturnCode returnCode, K data){
-        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), data,new VersionDto(VersionCache.version,VersionCache.type));
+        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(), data,new VersionDto(VersionCache.version,VersionCache.type,VersionCache.url));
     }
     public static KxgResponse create(ReturnCode returnCode){
-        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(),null,new VersionDto(VersionCache.version,VersionCache.type));
+        return new KxgResponse(returnCode.getCode(), returnCode.getMsg(),null,new VersionDto(VersionCache.version,VersionCache.type,VersionCache.url));
     }
 }
